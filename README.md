@@ -1,2 +1,3 @@
-# team4-mini-BE
-미니프로젝트 4팀 BE 레포지토리입니다.
+<div align="center">
+  <img width="300" alt="image" src="https://github.com/user-attachments/assets/fa82a76f-c19e-4867-ac70-83d8a6322379" />
+</div>
