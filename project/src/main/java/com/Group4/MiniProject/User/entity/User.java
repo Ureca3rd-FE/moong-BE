@@ -23,7 +23,7 @@ public class User {
 
     @Column(length = 10, nullable = false)
     private String password;
-    
+
     @Column(length = 150)
     private String RefreshToken;
 
