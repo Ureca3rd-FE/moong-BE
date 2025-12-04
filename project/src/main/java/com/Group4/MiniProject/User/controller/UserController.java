@@ -6,13 +6,16 @@ import com.Group4.MiniProject.User.dto.UserResponseDto;
 import com.Group4.MiniProject.User.dto.LoginResponseDto;
 import com.Group4.MiniProject.common.dto.ErrorResponseDto;
 import com.Group4.MiniProject.User.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/member")
+@Tag(name = "회원 관리 API")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -22,6 +25,7 @@ public class UserController {
      * @param requestDto 닉네임과 비밀번호를 담은 요청 객체
      * @return 성공 시 "ok", 실패 시 에러 메시지
      */
+    @Operation(summary = "회원가입")
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserRequestDto requestDto) {
         try {
@@ -45,6 +49,7 @@ public class UserController {
      * @param requestDto 닉네임과 비밀번호를 담은 요청 객체
      * @return 성공 시 사용자 정보, 실패 시 에러 메시지
      */
+    @Operation(summary = "로그인")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserRequestDto requestDto) {
         try {
@@ -64,6 +69,7 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "회원 탈퇴")
     @DeleteMapping("/withdraw")
     public ResponseEntity<?> withdraw(@RequestBody UserDeleteRequestDto requestDto) {
         try {
