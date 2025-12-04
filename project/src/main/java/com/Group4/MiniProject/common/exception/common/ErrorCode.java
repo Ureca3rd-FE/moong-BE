@@ -23,8 +23,7 @@ public enum ErrorCode {
     CONTENT_NOT_FOUND("컨텐츠를 찾을 수 없습니다.", 404),
     CONTENT_ACCESS_DENIED("컨텐츠 접근 권한이 없습니다.", 403),
 
-    // ========== 이미지 관련 (400, 500) ==========
-    IMAGE_UPLOAD_FAILED("이미지 업로드에 실패했습니다.", 500),
+    // ========== 이미지 관련 (400) ==========
     IMAGE_NOT_FOUND("이미지를 찾을 수 없습니다.", 404),
     INVALID_IMAGE_FORMAT("지원하지 않는 이미지 형식입니다.", 400),
 
