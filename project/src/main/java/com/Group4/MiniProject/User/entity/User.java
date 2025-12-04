@@ -24,6 +24,12 @@ public class User {
     @Column(length = 10, nullable = false)
     private String password;
 
+    @Column(length = 150)
+    private String AccessToken;
+
+    @Column(length = 150)
+    private String RefreshToken;
+
     // User : Ingredient = 1 : 1
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Ingredient Ingredient;
