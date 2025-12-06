@@ -27,7 +27,7 @@ public class JwtParser {
         return parseClaims(token).getPayload()
                 .getExpiration().getTime();
     }
-    
+
     public Jws<Claims> parseClaims(final String token){
         return Jwts.parser()
                 .verifyWith(secretKey)
