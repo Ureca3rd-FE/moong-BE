@@ -1,8 +1,8 @@
 package com.Group4.MiniProject.jwt.components;
 
 import com.Group4.MiniProject.User.entity.User;
-import com.Group4.MiniProject.jwt.dto.TokenInfoDTO.TokenInfo;
-import com.Group4.MiniProject.config.JwtProperties;
+import com.Group4.MiniProject.jwt.util.TokenInfoDTO.TokenInfo;
+import com.Group4.MiniProject.jwt.util.JwtProperties;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

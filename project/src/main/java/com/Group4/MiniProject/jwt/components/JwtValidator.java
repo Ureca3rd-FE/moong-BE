@@ -1,6 +1,6 @@
 package com.Group4.MiniProject.jwt.components;
 
-import com.Group4.MiniProject.config.JwtProperties;
+import com.Group4.MiniProject.jwt.util.JwtProperties;
 import com.Group4.MiniProject.common.exception.auth.TokenExpiredException;
 import com.Group4.MiniProject.common.exception.auth.TokenInvalidException;
 import com.Group4.MiniProject.common.exception.auth.UnAuthorizedException;
