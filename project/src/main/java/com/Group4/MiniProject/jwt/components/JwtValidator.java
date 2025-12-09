@@ -60,6 +60,4 @@ public class JwtValidator {
 
         return expiration.before(new Date());
     }
-
-
 }

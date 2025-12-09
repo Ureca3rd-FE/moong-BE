@@ -6,6 +6,7 @@ import com.Group4.MiniProject.User.dto.UserResponseDto;
 import com.Group4.MiniProject.User.dto.LoginResponseDto;
 import com.Group4.MiniProject.common.dto.ErrorResponseDto;
 import com.Group4.MiniProject.User.service.UserService;
+import com.Group4.MiniProject.User.dto.LoginResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -53,9 +54,9 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserRequestDto requestDto) {
         try {
-            String nickname = userService.login(requestDto);
+            LoginResponseDto response = userService.login(requestDto);
 
-            return ResponseEntity.ok(LoginResponseDto.success(nickname));
+            return ResponseEntity.ok(response);
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity

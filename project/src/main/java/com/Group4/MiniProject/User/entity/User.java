@@ -34,4 +34,6 @@ public class User {
     // User : Message = 1 : N
     @OneToMany(mappedBy = "receivedUser", cascade = CascadeType.ALL)
     private java.util.List<Message> receivedMessages;
+
+
 }

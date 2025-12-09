@@ -1,7 +1,7 @@
 package com.Group4.MiniProject.jwt.components;
 
 import com.Group4.MiniProject.User.entity.User;
-import com.Group4.MiniProject.jwt.util.TokenInfoDTO.TokenInfo;
+import com.Group4.MiniProject.jwt.util.TokenInfo;
 import com.Group4.MiniProject.jwt.util.JwtProperties;
 
 import io.jsonwebtoken.Jwts;
@@ -10,6 +10,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -25,21 +26,11 @@ public class JwtProvider {
     private SecretKey secretKey;  // 필드로 저장
 
     /**
-     * 초기화: 애플리케이션 시작 시 한 번만 SecretKey 생성
-     */
-    @PostConstruct
-    public void init() {
-        byte[] keyBytes = jwtProperties.getSalt().getBytes(StandardCharsets.UTF_8);
-        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
-        log.info("JwtProvider 초기화 완료 - SecretKey 생성됨");
-    }
-
-    /**
      * Access Token 생성
      */
     public TokenInfo generateAccessToken(final User user) {
         log.debug("Access Token 생성 - userId: {}, nickname: {}", user.getId(), user.getNickname());
-        return generateToken(user, jwtProperties.getAccessTokenExpireIn(), "ACCESS");
+        return generateToken(user, jwtProperties.accessTokenExpireIn(), "ACCESS");
     }
 
     /**
@@ -47,7 +38,7 @@ public class JwtProvider {
      */
     public TokenInfo generateRefreshToken(final User user) {
         log.debug("Refresh Token 생성 - userId: {}, nickname: {}", user.getId(), user.getNickname());
-        return generateToken(user, jwtProperties.getRefreshTokenExpireIn(), "REFRESH");
+        return generateToken(user, jwtProperties.refreshTokenExpireIn(), "REFRESH");
     }
 
     /**
@@ -58,7 +49,7 @@ public class JwtProvider {
         long expiredAt = now + expiration;
 
         String token = Jwts.builder()
-                .issuer(jwtProperties.getIssuer())
+                .issuer(jwtProperties.issuer())
                 .subject(user.getNickname())
                 .claim("userId", user.getId())
                 .claim("nickname", user.getNickname())

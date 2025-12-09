@@ -3,8 +3,8 @@ package com.Group4.MiniProject.jwt.util;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 
-public class TokenInfoDTO {
-    public record TokenInfo(
+
+public record TokenInfo(
             @Schema(description = "JWT 토큰 문자열")
             String token,
 
@@ -29,4 +29,3 @@ public class TokenInfoDTO {
             return expiresIn <= 0;
         }
     }
-}
