@@ -47,6 +47,7 @@ public class Message {
     @Column(length = 500)
     private String message;
 
+    // 편지가 열려있는지 아닌지 확인
     @Column(name = "is_open")
     private boolean isOpen;
 
@@ -65,5 +66,10 @@ public class Message {
         if(uuid == null){
             uuid = UUID.randomUUID();
         }
+    }
+
+    // 편지 열기
+    public void open(){
+        this.isOpen = true;
     }
 }
