@@ -17,8 +17,8 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     // userId와 isOpen=true 기준으로 리스트 조회
     List<Message> findByReceivedUserIdAndIsOpenTrue(Long userId);
 
-    // userId를 기준으로 isOpen=false인 메세지 개수 조회
-    long countByReceivedUserIdAndIsOpenFalse(Long userId);
+    // userId와 isOpen=false 기준으로 리스트 조회
+    List<Message> findByReceivedUserIdAndIsOpenFalse(Long userId);
 
     // 메시지 개별 조회
     Optional<Message> findByUuid(UUID uuid);
