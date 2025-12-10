@@ -96,7 +96,17 @@ public class MessageService {
                     .collect(Collectors.toList());
         }
 
-        public Long getUnopenedMessageCount(Long userId) {
-            return messageRepository.countByReceivedUserIdAndIsOpenFalse(userId);
+        // 열지 않은 편지 리스트 조회
+        public List<MessageListResponseDto> getUnopenedMessageList(Long userId){
+            // Repository 호출
+            List<Message> messages = messageRepository.findByReceivedUserIdAndIsOpenFalse(userId);
+
+            // 예외 처리
+            if(messages.isEmpty()) throw new IllegalArgumentException("받은 편지가 없습니다.");
+
+            // 엔티티 리스트를 DTO 리스트로 변환하여 반환
+            return messages.stream()
+                    .map(MessageListResponseDto::new)
+                    .collect(Collectors.toList());
         }
     }
