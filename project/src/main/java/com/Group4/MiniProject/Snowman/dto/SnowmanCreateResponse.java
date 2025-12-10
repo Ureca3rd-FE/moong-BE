@@ -11,6 +11,7 @@ public class SnowmanCreateResponse {
     private Long snowmanId;
     private String message;
 
+    // 눈사람 생성 응답 DTO
     public static SnowmanCreateResponse of(Long snowmanId){
         return SnowmanCreateResponse.builder()
                 .snowmanId(snowmanId)
