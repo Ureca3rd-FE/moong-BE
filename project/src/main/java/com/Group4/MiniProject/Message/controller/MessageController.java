@@ -39,11 +39,11 @@ public class MessageController {
     }
 
     @GetMapping("/unopened")
-    public ResponseEntity<Long> getUnopenedMessageCount(
+    public ResponseEntity<List<MessageListResponseDto>> getUnopenedMessageList(
             @RequestParam(name = "userId") Long userId // userId 쿼리 파라미터로 받습니다.
     ) {
-        Long count = messageService.getUnopenedMessageCount(userId);
-        return ResponseEntity.ok(count);
+        List<MessageListResponseDto> messages = messageService.getUnopenedMessageList(userId);
+        return ResponseEntity.ok(messages);
     }
 
 
