@@ -68,8 +68,8 @@ public class UserService {
                 .rock(0)
                 .carrot(0)
                 .branch(0)
-                .neck(0)
-                .user(savedUser)
+                .muffler(0)
+                .user(savedUser) // 4. '저장된 User'(ID가 있음)를 Ingredient에 연결
                 .build();
 
         // Ingredient 저장

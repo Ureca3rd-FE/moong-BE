@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MessageService {
 
     private final MessageRepository messageRepository;
@@ -42,12 +43,6 @@ public class MessageService {
         // DTO로 변환하여 반환
         return new MessageCreateResponseDto(message);
 
-        // 빌더 패턴이 null 값으로 보내주게 되어 주석 차리
-//        return MessageResponseDto.builder()
-//                .message(message.getMessage())
-//                .nickname(message.getNickname())
-//                .themeId(message.getTheme().getThemeId())
-//                .build();
     }
 
     // 메시지 작성 및 재료 지급
@@ -84,35 +79,34 @@ public class MessageService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자의 재료 정보를 찾을 수 없습니다."));
 
         // 랜덤 3개 재료 지급
-        List<String> ingredientNames = Arrays.asList("snow", "rock", "carrot", "branch", "muffler");
-        Random random = new Random();
-        for (int i = 0; i < 3; i++) {
-            String randomIngredient = ingredientNames.get(random.nextInt(ingredientNames.size()));
-            switch (randomIngredient) {
-                case "snow" -> ingredient.setSnow(ingredient.getSnow() + 1);
-                case "rock" -> ingredient.setRock(ingredient.getRock() + 1);
-                case "carrot" -> ingredient.setCarrot(ingredient.getCarrot() + 1);
-                case "branch" -> ingredient.setBranch(ingredient.getBranch() + 1);
-                case "muffler" -> ingredient.setNeck(ingredient.getNeck() + 1);
+        ingredient.addRandomIngredients(3);
+        }
+
+        // 열린 메시지 리스트 조회
+        public List<MessageListResponseDto> getMessageListByUserIdAndOpenStatus(Long userId) {
+            // userId와 isOpen=true를 조건으로 사용
+            List<Message> messages = messageRepository.findByReceivedUserIdAndIsOpenTrue(userId);
+
+            if (messages.isEmpty()) {
+                throw new IllegalArgumentException("열린 메시지가 존재하지 않습니다.");
             }
+            // 엔티티 리스트를 DTO 리스트로 변환하여 반환
+            return messages.stream()
+                    .map(MessageListResponseDto::new)
+                    .collect(Collectors.toList());
         }
 
-        ingredientRepository.save(ingredient);
-    }
+        // 열지 않은 편지 리스트 조회
+        public List<MessageListResponseDto> getUnopenedMessageList(Long userId){
+            // Repository 호출
+            List<Message> messages = messageRepository.findByReceivedUserIdAndIsOpenFalse(userId);
 
-    public List<MessageListResponseDto> getMessageListByUserIdAndOpenStatus(Long userId) {
-        // userId와 isOpen=true를 조건으로 사용
-        List<Message> messages = messageRepository.findByReceivedUserIdAndIsOpenTrue(userId);
-        if (messages.isEmpty()) {
-            throw new IllegalArgumentException("열린 메시지가 존재하지 않습니다.");
+            // 예외 처리
+            if(messages.isEmpty()) throw new IllegalArgumentException("받은 편지가 없습니다.");
+
+            // 엔티티 리스트를 DTO 리스트로 변환하여 반환
+            return messages.stream()
+                    .map(MessageListResponseDto::new)
+                    .collect(Collectors.toList());
         }
-        // 엔티티 리스트를 DTO 리스트로 변환하여 반환
-        return messages.stream()
-                .map(MessageListResponseDto::new)
-                .collect(Collectors.toList());
     }
-
-    public Long getUnopenedMessageCount(Long userId) {
-        return messageRepository.countByReceivedUserIdAndIsOpenFalse(userId);
-    }
-}
