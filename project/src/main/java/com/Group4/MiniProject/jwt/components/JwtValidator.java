@@ -32,8 +32,34 @@ public class JwtValidator {
     private Jws<Claims> parseAndVerifySignature(final String token) {
         try {
             return jwtParser.parseClaims(token);
-        } catch (JwtException e) {
+        } catch (ExpiredJwtException e) {
+            // 만료된 토큰
+            throw new TokenExpiredException();
+        } catch (UnsupportedJwtException | MalformedJwtException |
+                 SignatureException | IllegalArgumentException e) {
+            // 유효하지 않은 토큰
             throw new TokenInvalidException();
+        } catch (JwtException e) {
+            // 기타 JWT 예외
+            throw new TokenInvalidException();
+        }
+    }
+
+    public boolean isRefreshToken(final String token) {
+        try {
+            String tokenType = jwtParser.getTokenType(token);
+            boolean isRefresh = "REFRESH".equals(tokenType);
+
+            // 🔥 수정: String.format 사용
+            System.err.println(String.format("토큰 타입 확인: %s (Refresh Token: %s)",
+                    tokenType, isRefresh));
+
+            return isRefresh;
+
+        } catch (Exception e) {
+            // 🔥 수정: log 제거
+            System.err.println("토큰 타입 확인 실패: " + e.getMessage());
+            return false;
         }
     }
 

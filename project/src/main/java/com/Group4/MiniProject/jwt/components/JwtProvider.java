@@ -25,6 +25,13 @@ public class JwtProvider {
     private final JwtProperties jwtProperties;
     private SecretKey secretKey;  // 필드로 저장
 
+    @PostConstruct
+    public void init() {
+        byte[] keyBytes = jwtProperties.secret().getBytes(StandardCharsets.UTF_8);
+        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+        log.info("Jwt secretkey 초기화 완료");
+    }
+
     /**
      * Access Token 생성
      */
@@ -50,7 +57,8 @@ public class JwtProvider {
 
         String token = Jwts.builder()
                 .issuer(jwtProperties.issuer())
-                .subject(user.getNickname())
+                //.subject(user.getNickname())
+                .subject(String.valueOf(user.getId()))
                 .claim("userId", user.getId())
                 .claim("nickname", user.getNickname())
                 .claim("tokenType", tokenType)
@@ -63,5 +71,9 @@ public class JwtProvider {
                 user.getId(), tokenType, new Date(expiredAt));
 
         return TokenInfo.of(token, expiredAt);
+    }
+
+    public SecretKey getSecretKey() {
+        return secretKey;
     }
 }
