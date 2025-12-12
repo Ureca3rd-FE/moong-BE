@@ -16,8 +16,10 @@ public enum WhiteList {
     SWAGGER_UI_INDEX("/swagger-ui/index.html", HttpMethod.GET),
     SWAGGER_STATIC_RESOURCES("/webjars/**", HttpMethod.GET),
 
-    LOGIN_REQUEST("/api/v1/auth/login", HttpMethod.POST),
-    SIGNUP_REQUEST("/api/v1/members/signup", HttpMethod.POST);
+    MEMBER_SIGNUP("/api/member/signup", HttpMethod.POST),
+    MEMBER_LOGIN("/api/member/login", HttpMethod.POST),      // 🔥 수정!
+    MEMBER_REFRESH("/api/member/refresh", HttpMethod.POST),  // 🔥 추가!
+    MEMBER_TEST("/api/member/test", HttpMethod.GET);
 
     private static final AntPathMatcher pathMatcher = new AntPathMatcher();
     private final String path;
