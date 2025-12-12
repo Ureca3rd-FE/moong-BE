@@ -82,6 +82,7 @@ public class UserService {
      */
     @Transactional  // ✅ RefreshToken 저장 때문에 트랜잭션 필요
     public LoginResponseDto login(UserRequestDto requestDto) {
+        System.out.println("[Login]들어온 요청 :" + requestDto.getNickname());
         // 유효성 검사
         if (requestDto.getNickname() == null || requestDto.getNickname().trim().isEmpty()) {
             throw new IllegalArgumentException("닉네임을 입력해주세요.");
@@ -107,12 +108,14 @@ public class UserService {
         user.setRefreshToken(refreshToken.token());
 
         // 5. 응답 DTO 생성 ✅
-        return LoginResponseDto.of(
+        LoginResponseDto dto = LoginResponseDto.of(
                 accessToken.token(),
                 accessToken.expiredAt(),
                 refreshToken.token(),
                 refreshToken.expiredAt()
         );
+        System.out.println("[Login]응답 DTO : " + dto.getAccessToken());
+        return dto;
     }
 
     /**

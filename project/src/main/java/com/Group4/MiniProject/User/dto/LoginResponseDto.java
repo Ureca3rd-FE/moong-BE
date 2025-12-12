@@ -1,10 +1,12 @@
 package com.Group4.MiniProject.User.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
+@Schema(description = "로그인 응답 DTO")
 public class LoginResponseDto {
 
     private String accessToken;

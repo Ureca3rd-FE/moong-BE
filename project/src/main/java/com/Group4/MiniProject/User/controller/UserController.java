@@ -6,8 +6,11 @@ import com.Group4.MiniProject.User.dto.UserResponseDto;
 import com.Group4.MiniProject.User.dto.LoginResponseDto;
 import com.Group4.MiniProject.common.dto.ErrorResponseDto;
 import com.Group4.MiniProject.User.service.UserService;
-import com.Group4.MiniProject.User.dto.LoginResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,16 +25,17 @@ public class UserController {
 
     private final UserService userService;
 
-    /**
-     * @param requestDto 닉네임과 비밀번호를 담은 요청 객체
-     * @return 성공 시 "ok", 실패 시 에러 메시지
-     */
     @Operation(summary = "회원가입")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원가입 성공",
+                    content = @Content(schema = @Schema(implementation = UserResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserRequestDto requestDto) {
         try {
             userService.signup(requestDto);
-
             return ResponseEntity.ok(UserResponseDto.ok());
 
         } catch (IllegalArgumentException e) {
@@ -46,16 +50,37 @@ public class UserController {
         }
     }
 
-    /**
-     * @param requestDto 닉네임과 비밀번호를 담은 요청 객체
-     * @return 성공 시 사용자 정보, 실패 시 에러 메시지
-     */
     @Operation(summary = "로그인")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "로그인 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = LoginResponseDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증 실패 (닉네임 또는 비밀번호 불일치)",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 에러",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    })
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserRequestDto requestDto) {
+    public ResponseEntity<Object> login(@RequestBody UserRequestDto requestDto) {
         try {
             LoginResponseDto response = userService.login(requestDto);
-
             return ResponseEntity.ok(response);
 
         } catch (IllegalArgumentException e) {
@@ -71,6 +96,11 @@ public class UserController {
     }
 
     @Operation(summary = "회원 탈퇴")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 탈퇴 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
     @DeleteMapping("/withdraw")
     public ResponseEntity<?> withdraw(@RequestBody UserDeleteRequestDto requestDto) {
         try {
@@ -87,6 +117,7 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "API 상태 확인")
     @GetMapping("/test")
     public ResponseEntity<String> test() {
         return ResponseEntity.ok("API 서버가 정상 작동 중입니다.");
