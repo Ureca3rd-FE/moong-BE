@@ -1,4 +1,4 @@
-package com.Group4.MiniProject.common.exception;
+package com.Group4.MiniProject.common.exception.handler;
 
 import com.Group4.MiniProject.common.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;

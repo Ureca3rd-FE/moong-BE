@@ -25,9 +25,6 @@ public class User {
     private String password;
 
     @Column(length = 150)
-    private String AccessToken;
-
-    @Column(length = 150)
     private String RefreshToken;
 
     // User : Ingredient = 1 : 1
@@ -37,4 +34,6 @@ public class User {
     // User : Message = 1 : N
     @OneToMany(mappedBy = "receivedUser", cascade = CascadeType.ALL)
     private java.util.List<Message> receivedMessages;
+
+
 }
