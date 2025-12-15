@@ -35,6 +35,3 @@ public class SnowmanEntity {
         this.openMessage = message;
     }
 }
-
-public class SnowmanEntity {
-}
