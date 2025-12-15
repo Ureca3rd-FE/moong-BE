@@ -24,7 +24,7 @@ public class User {
     @Column(length = 10, nullable = false)
     private String password;
 
-    @Column(length = 150)
+    @Column(length = 1000)
     private String RefreshToken;
 
     // User : Ingredient = 1 : 1
