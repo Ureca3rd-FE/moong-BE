@@ -1,9 +1,6 @@
 package com.Group4.MiniProject.User.controller;
 
-import com.Group4.MiniProject.User.dto.UserDeleteRequestDto;
-import com.Group4.MiniProject.User.dto.UserRequestDto;
-import com.Group4.MiniProject.User.dto.UserResponseDto;
-import com.Group4.MiniProject.User.dto.LoginResponseDto;
+import com.Group4.MiniProject.User.dto.*;
 import com.Group4.MiniProject.common.dto.ErrorResponseDto;
 import com.Group4.MiniProject.User.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -114,6 +111,30 @@ public class UserController {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponseDto("서버 에러 발생."));
+        }
+    }
+
+    @Operation(summary = "사용자 홈 화면 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "홈화면 조회 성공",
+                    content = @Content(schema = @Schema(implementation = UserInfoResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @GetMapping("/homeinfo")
+    public ResponseEntity<?> getHomeInfo(@RequestHeader("Authorization")String token){
+        try{
+            String accessToken = token.replace("Bearer ", "");
+            UserInfoResponseDto userInfo = userService.getCurrentUserInfo(accessToken);
+            return ResponseEntity.ok(userInfo);
+        } catch(IllegalAccessException e){
+            return ResponseEntitiy
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponseDto(e.getMessage()));
+        } catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDto("서버에러발생"));
         }
     }
 
