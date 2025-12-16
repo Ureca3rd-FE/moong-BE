@@ -83,29 +83,39 @@ public class UserService {
     @Transactional  // ✅ RefreshToken 저장 때문에 트랜잭션 필요
     public LoginResponseDto login(UserRequestDto requestDto) {
         System.out.println("[Login]들어온 요청 :" + requestDto.getNickname());
+        System.out.println("=============================");
         // 유효성 검사
         if (requestDto.getNickname() == null || requestDto.getNickname().trim().isEmpty()) {
+            System.out.println("❌[Login 실패] : 닉네임 미입력");
             throw new IllegalArgumentException("닉네임을 입력해주세요.");
         }
         if (requestDto.getPassword() == null || requestDto.getPassword().trim().isEmpty()) {
+            System.out.println("❌[Login 실패] : 비밀번호 미입력");
             throw new IllegalArgumentException("비밀번호를 입력해주세요.");
         }
 
         // 1. 닉네임으로 회원 조회
         User user = userRepository.findByNickname(requestDto.getNickname())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 닉네임입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("❌존재하지 않는 닉네임입니다."));
+        System.out.println("[Login] 사용자조회 검증 성공");
+
 
         // 2. 비밀번호 검증 (암호화된 비밀번호와 비교) ✅
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-
+        System.out.println("[Login] 비밀번호 검증 성공");
         // 3. JWT 토큰 생성 ✅
         TokenInfo accessToken = jwtProvider.generateAccessToken(user);
         TokenInfo refreshToken = jwtProvider.generateRefreshToken(user);
+        System.out.println("🎫 [Login] Access Token 생성 완료");
+        System.out.println("🎫 [Login] Refresh Token 생성 완료");
+
 
         // 4. RefreshToken DB 저장 ✅
         user.setRefreshToken(refreshToken.token());
+        System.out.println("💾 [Login] Refresh Token DB 저장 완료");
+
 
         // 5. 응답 DTO 생성 ✅
         LoginResponseDto dto = LoginResponseDto.of(
@@ -115,6 +125,13 @@ public class UserService {
                 refreshToken.expiredAt()
         );
         System.out.println("[Login]응답 DTO : " + dto.getAccessToken());
+        System.out.println("========================================");
+        System.out.println("✅✅✅ 로그인 성공! ✅✅✅");
+        System.out.println("   - 사용자: " + user.getNickname());
+        System.out.println("   - userId: " + user.getId());
+        System.out.println("   - Access Token 만료: " + accessToken.expiredAt());
+        System.out.println("   - Refresh Token 만료: " + refreshToken.expiredAt());
+        System.out.println("========================================");
         return dto;
     }
 
