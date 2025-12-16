@@ -127,8 +127,8 @@ public class UserController {
             String accessToken = token.replace("Bearer ", "");
             UserInfoResponseDto userInfo = userService.getCurrentUserInfo(accessToken);
             return ResponseEntity.ok(userInfo);
-        } catch(IllegalAccessException e){
-            return ResponseEntitiy
+        } catch(IllegalArgumentException e){
+            return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponseDto(e.getMessage()));
         } catch (Exception e){
