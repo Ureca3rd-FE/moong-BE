@@ -1,6 +1,7 @@
 package com.Group4.MiniProject.User.service;
 
 import com.Group4.MiniProject.User.dto.UserDeleteRequestDto;
+import com.Group4.MiniProject.User.dto.UserInfoResponseDto;
 import com.Group4.MiniProject.User.dto.UserRequestDto;
 import com.Group4.MiniProject.User.dto.LoginResponseDto;  // ✅ 추가
 import com.Group4.MiniProject.Ingredient.entity.Ingredient;
@@ -26,10 +27,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final IngredientRepository ingredientRepository;
-    private final PasswordEncoder passwordEncoder;  // ✅ 추가
-    private final JwtProvider jwtProvider;  // ✅ 추가
-    private final JwtValidator jwtValidator;  // ✅ 추가
-    private final JwtParser jwtParser;  // ✅ 추가
+    private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
+    private final JwtValidator jwtValidator;
+    private final JwtParser jwtParser;
 
     /**
      * 회원가입
@@ -77,6 +78,26 @@ public class UserService {
         savedUser.setIngredient(ingredient);
     }
 
+    public UserInfoResponseDto getCurrentUserInfo(String accessToken){
+        jwtValidator.verifyToken(accessToken);
+        Claims claims = jwtParser.parseClaims(accessToken).getPayload();
+
+        Long userId = claims.get("userId", Long.class);
+        User user = findById(userId);
+
+        Ingredient ingredient = user.getIngredient();
+        UserInfoResponseDto.IngredientDto ingredientDto = UserInfoResponseDto.IngredientDto.builder()
+                .snow(ingredient.getSnow())
+                .rock(ingredient.getRock())
+                .carrot(ingredient.getCarrot())
+                .branch(ingredient.getBranch())
+                .muffler(ingredient.getMuffler())
+                .build();
+        return UserInfoResponseDto.builder()
+                .nickname(user.getNickname())
+                .ingredient(ingredientDto)
+                .build();
+    }
     /**
      * 로그인 (JWT 토큰 발급)
      */
