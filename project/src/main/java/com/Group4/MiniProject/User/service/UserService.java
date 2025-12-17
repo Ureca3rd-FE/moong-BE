@@ -82,7 +82,7 @@ public class UserService {
         jwtValidator.verifyToken(accessToken);
         Claims claims = jwtParser.parseClaims(accessToken).getPayload();
 
-        Long userId = claims.get("userid", Long.class);
+        Long userId = claims.get("userId", Long.class);
         User user = findById(userId);
 
         Ingredient ingredient = user.getIngredient();

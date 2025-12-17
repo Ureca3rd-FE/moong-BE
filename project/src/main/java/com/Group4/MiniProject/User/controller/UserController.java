@@ -123,15 +123,33 @@ public class UserController {
     })
     @GetMapping("/homeinfo")
     public ResponseEntity<?> getHomeInfo(@RequestHeader("Authorization")String token){
+        System.out.println("========================================");
+        System.out.println("[HomeInfo] 요청 수신");
+        System.out.println("[HomeInfo] Authorization 헤더 : " + (token != null));
+        System.out.println("========================================");
         try{
             String accessToken = token.replace("Bearer ", "");
+            System.out.println("[HomeInfo] 토큰 추출");
+
             UserInfoResponseDto userInfo = userService.getCurrentUserInfo(accessToken);
+            System.out.println("[HomeInfo] 홈 정보 조회 성공");
+            System.out.println("[HomeInfo] nickname: " + userInfo.getNickname());
+            System.out.println("========================================");
+
             return ResponseEntity.ok(userInfo);
+
         } catch(IllegalArgumentException e){
+            System.err.println("[HomeInfo] 인증 실패: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponseDto(e.getMessage()));
         } catch (Exception e){
+            System.err.println("[HomeInfo] 서버 에러 발생");
+            System.err.println("에러 타입: " + e.getClass().getName());
+            System.err.println("에러 메시지: " + e.getMessage());
+
+            e.printStackTrace();
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponseDto("서버에러발생"));
