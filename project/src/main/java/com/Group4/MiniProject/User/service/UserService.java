@@ -143,7 +143,8 @@ public class UserService {
                 accessToken.token(),
                 accessToken.expiredAt(),
                 refreshToken.token(),
-                refreshToken.expiredAt()
+                refreshToken.expiredAt(),
+                user.getId()
         );
         System.out.println("[Login]응답 DTO : " + dto.getAccessToken());
         System.out.println("========================================");
@@ -288,7 +289,8 @@ public class UserService {
                 newAccessToken.token(),
                 newAccessToken.expiredAt(),
                 newRefreshToken.token(),
-                newRefreshToken.expiredAt()
+                newRefreshToken.expiredAt(),
+                userId
         );
     }
 
