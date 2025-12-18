@@ -37,13 +37,11 @@ public class SnowmanService {
 
         long unopenSize = unopenedMessages.size();
         long openCount = unopenSize - 1;
-        int open = 0;
 
         if(openCount > 0){
             for(int i = 0; i < openCount; i++){
                 Message message = unopenedMessages.get(i);
                 message.open();
-                open++;
             }
         }
 
