@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@Tag(name = "Snowman API", description = "눈사람 생성 및 편지 열기 기능") // 스웨거 그룹 이름
+@Tag(name = "Snowman API", description = "눈사람 생성 시 편지 n - 1 열기 기능") // 스웨거 그룹 이름
 @RestController
 @RequestMapping("/api/snowman")
 @RequiredArgsConstructor
@@ -23,17 +23,6 @@ public class SnowmanController {
     @PostMapping
     public ResponseEntity<SnowmanCreateResponse> createSnowman(@RequestParam Long userId){
         SnowmanCreateResponse response = snowmanService.makeSnowman(userId);
-        return ResponseEntity.ok(response);
-    }
-
-    // 편지 열기 API
-    @Operation(summary = "편지 열기", description = "눈사람 1개를 소모하여 잠긴 편지를 엽니다.")
-    @PostMapping("/messages/{messageId}/open")
-    public ResponseEntity<MessageCreateResponseDto> openMessage(
-            @PathVariable UUID messageId,
-            @RequestParam Long userId
-    ){
-        MessageCreateResponseDto response = snowmanService.openMessage(userId, messageId);
         return ResponseEntity.ok(response);
     }
 }
