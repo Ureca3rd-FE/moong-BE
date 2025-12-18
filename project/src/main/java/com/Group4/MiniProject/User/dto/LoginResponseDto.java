@@ -13,6 +13,7 @@ public class LoginResponseDto {
     private long accessTokenExpiredAt;
     private String refreshToken;
     private long refreshTokenExpiredAt;
+    private long userId;
 
     /**
      * LoginResponseDto 생성 팩토리 메서드
@@ -21,13 +22,15 @@ public class LoginResponseDto {
             String accessToken,
             long accessTokenExpiredAt,
             String refreshToken,
-            long refreshTokenExpiredAt
+            long refreshTokenExpiredAt,
+            long userId
     ) {
         return new LoginResponseDto(
                 accessToken,
                 accessTokenExpiredAt,
                 refreshToken,
-                refreshTokenExpiredAt
+                refreshTokenExpiredAt,
+                userId
         );
     }
 }
