@@ -67,6 +67,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:3000",
                 "http://localhost:5173",
+                "http://localhost:4173",
+                "https://moong-fe.vercel.app",
                 "http://localhost:8080" //TODO : 도메인 생성시 추가
                 ));
         configuration.setAllowedMethods(List.of(
