@@ -15,6 +15,9 @@ public class LoginResponseDto {
     private long refreshTokenExpiredAt;
     private long userId;
 
+    @Schema(description = "첫 로그인 여부 (true: 첫 로그인, false: 기존 유저)")
+    private boolean isFirst; // ✅ 추가됨
+
     /**
      * LoginResponseDto 생성 팩토리 메서드
      */
@@ -23,14 +26,16 @@ public class LoginResponseDto {
             long accessTokenExpiredAt,
             String refreshToken,
             long refreshTokenExpiredAt,
-            long userId
+            long userId,
+            boolean isFirst // ✅ 파라미터 추가
     ) {
         return new LoginResponseDto(
                 accessToken,
                 accessTokenExpiredAt,
                 refreshToken,
                 refreshTokenExpiredAt,
-                userId
+                userId,
+                isFirst // ✅ 필드 초기화
         );
     }
 }
