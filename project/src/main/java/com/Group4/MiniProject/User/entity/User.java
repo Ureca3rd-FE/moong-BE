@@ -31,6 +31,10 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Ingredient Ingredient;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean isFirst = true;
+
     // User : Message = 1 : N
     @OneToMany(mappedBy = "receivedUser", cascade = CascadeType.ALL)
     private java.util.List<Message> receivedMessages;
