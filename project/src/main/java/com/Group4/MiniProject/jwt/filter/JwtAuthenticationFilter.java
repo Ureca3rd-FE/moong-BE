@@ -54,8 +54,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
-        boolean skip = WhiteList.isPermitted(request.getRequestURI(), request.getMethod());
-        System.out.println("shouldNotFilter: " + request.getRequestURI() + " → " + skip);
+        String path = request.getRequestURI();
+
+        // ✅ [수정] WhiteList에 등록되지 않았더라도 /api/user/ 경로는 필터를 건너뛰도록 강제 설정
+        boolean isPublicPath = path.startsWith("/api/user/") ||
+                path.startsWith("/api/member/homeinfo/");
+
+        boolean skip = isPublicPath || WhiteList.isPermitted(path, request.getMethod());
+
+        System.out.println("shouldNotFilter 체크: " + path + " → " + skip);
         return skip;
     }
 
@@ -70,10 +77,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String accessTokenWithBearer = request.getHeader(ACCESS_TOKEN_HEADER_KEY);
 
-        // ✅ 수정 포인트: 토큰이 없거나 형식이 틀린 경우, 에러를 던지지 않고 다음 필터로 넘깁니다.
-        // 이렇게 해야 SecurityConfig의 permitAll() 설정이 정상적으로 동작합니다.
+        // 토큰이 없거나 형식이 틀린 경우, 다음 필터(SecurityConfig의 permitAll 체크)로 넘김
         if (accessTokenWithBearer == null || !jwtValidator.isValidFormat(accessTokenWithBearer)) {
-            System.out.println("Access Token 없음 또는 형식 오류 → 다음 필터로 진행 (인증 없이 허용 가능성 확인)");
+            System.out.println("Access Token 없음 또는 형식 오류 → 다음 필터로 진행");
             filterChain.doFilter(request, response);
             return;
         }
