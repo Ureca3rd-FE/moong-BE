@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/member") // ✅ 경로 확인: /api/member
+@RequestMapping("/api/user")
 @Tag(name = "회원 관리 API")
 @RequiredArgsConstructor
 public class UserController {
@@ -91,7 +91,7 @@ public class UserController {
     }
 
     @Operation(summary = "사용자 홈 화면 조회")
-    @GetMapping("/homeinfo/{userId}") // 경로에 {userId} 추가
+    @GetMapping("/{userId}") // 경로에 {userId} 추가
     public ResponseEntity<?> getHomeInfo(@PathVariable Long userId) { // 토큰 대신 PathVariable 사용
         try {
             // 내 토큰 정보가 아닌, URL로 넘어온 ID를 사용하여 정보 조회
