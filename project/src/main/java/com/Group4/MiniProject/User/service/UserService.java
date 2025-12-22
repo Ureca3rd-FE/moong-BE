@@ -73,10 +73,8 @@ public class UserService {
         user.setFirst(false);
     }
 
-    public UserInfoResponseDto getCurrentUserInfo(String accessToken){
-        jwtValidator.verifyToken(accessToken);
-        Claims claims = jwtParser.parseClaims(accessToken).getPayload();
-        Long userId = claims.get("userId", Long.class);
+    public UserInfoResponseDto getUserInfoById(Long userId) {
+
         User user = findById(userId);
 
         Ingredient ingredient = user.getIngredient();

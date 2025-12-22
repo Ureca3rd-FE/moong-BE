@@ -51,8 +51,9 @@ public class SecurityConfig {
                                 "/api/member/refresh",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/swagger-resources/**"
-                        ).permitAll()
+                                "/swagger-resources/**",
+                                "/api/member/homeinfo/**"
+                                ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
